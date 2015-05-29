@@ -1,0 +1,225 @@
+<HTML>
+<HEAD align="left">
+<h3>Adtran TA5000 Scripting Tool</h3>
+        <script type="text/javascript">
+
+          function addtext()
+          {
+	     var type = document.myform.type.value;
+             var shelf = document.myform.shelf.value;
+             var slot = document.myform.slot.value;
+             var port = document.myform.port.value;
+             var port2 = port;
+	     port2++;
+	     var slash = "/";
+	     var comma = ",";
+             one = 1;
+	     var phone = document.myform.phone.value;
+             var max = document.myform.max.value;
+             var min = document.myform.min.value;
+             var vpi = document.myform.vpi.value;
+             var vci = document.myform.vci.value;
+             
+             if (type == "vdsl_adsl") {
+             document.writeln("config t<br>");
+             document.writeln("interface vdsl " + shelf + slash + slot + slash + port);
+	     document.writeln("<br>description " + phone);
+             document.writeln("<br>dmt-options snr-margin downstream margins minimum 0.0 target 8.0 maximum 31.0<br>");
+             document.writeln("dmt-options snr-margin upstream margins minimum 0.0 target 8.0 maximum 31.0 <br>");
+             document.writeln("latency-path payload-rate downstream 0 minimum 128 maximum " + max);
+             document.writeln("<br>latency-path payload-rate upstream 0 minimum 32 maximum " + min);
+             document.writeln("<br>latency-path type downstream 0 fast");
+             document.writeln("<br>latency-path type upstream 0 fast");
+	     document.writeln("<br>power-back-off upstream disable");
+	     document.writeln("<br>service-mode adsl2+");
+	     document.writeln("<br>no shutdown");
+	     document.writeln("<br>exit");
+	     document.writeln("<br>interface atm-port " + shelf + slash + slot + slash + port);
+	     document.writeln("<br>no shutdown");
+	     document.writeln("<br>exit");
+	     document.writeln("<br>interface vcl " + shelf + slash + slot + slash + port);
+	     document.writeln("vpi 0 vci 35");
+	     document.writeln("<br>no shutdown");
+	     document.writeln("<br>exit");
+	     document.writeln("<br>evc-map " + shelf + slash + slot + slash + port);
+	     document.writeln(shelf + slash + slot);
+	     document.writeln("<br>connect evc " + vpi);
+	     document.writeln("<br>connect uni vcl " + shelf + slash + slot + slash + port);
+	     document.writeln("vpi 0 vci 35");
+	     document.writeln("<br>men-c-tag " + vci);
+	     document.writeln("<br>encapsulation auto");
+	     document.writeln("<br>no shutdown");
+	     document.writeln("<br>exit");
+}
+else if(type == "adsl_adsl_eth") {
+             document.writeln("config t<br>");
+             document.writeln("interface adsl " + shelf + slash + slot + slash + port);
+	     document.writeln("<br>description " + phone);
+             document.writeln("<br>dmt-options snr-margin downstream margins minimum 0.0 target 8.0 maximum 31.0<br>");
+             document.writeln("dmt-options snr-margin upstream margins minimum 0.0 target 8.0 maximum 31.0<br>");
+             document.writeln("latency-path payload-rate downstream 0 minimum 128 maximum " + max);
+             document.writeln("<br>latency-path payload-rate upstream 0 minimum 32 maximum " + min);
+             document.writeln("<br>latency-path type 0 fast");
+	     document.writeln("<br>service-mode adsl2+");
+	     document.writeln("<br>no shutdown");
+	     document.writeln("<br>exit");
+	     document.writeln("<br>int atm " + shelf + slash + slot + slash + port);
+	     document.writeln("<br>no shutdown");
+	     document.writeln("<br>exit");
+	     document.writeln("<br>interface vcl " + shelf + slash + slot + slash + port);
+	     document.writeln("vpi 0 vci 35");
+	     document.writeln("<br>no shutdown");
+	     document.writeln("<br>evc-map " + shelf + slash + slot + slash + port);
+	     document.writeln(shelf + slash + slot);
+	     document.writeln("<br>connect evc " + vpi);
+	     document.writeln("<br>connect uni vcl " + shelf + slash + slot + slash + port);
+	     document.writeln("vpi 0 vci 35");
+	     document.writeln("<br>men-c-tag " + vci);
+	     document.writeln("<br>encapsulation auto");
+	     document.writeln("<br>no shutdown");
+	     document.writeln("<br>exit");
+}
+else if(type == "adsl_adsl_atm") {
+             document.writeln("config t<br>");
+             document.writeln("interface adsl " + shelf + slash + slot + slash + port);
+	     document.writeln("<br>description " + phone);
+             document.writeln("<br>dmt-options snr-margin downstream margins minimum 0.0 target 8.0 maximum 31.0<br>");
+             document.writeln("dmt-options snr-margin upstream margins minimum 0.0 target 8.0 maximum 31.0<br>");
+             document.writeln("latency-path payload-rate downstream 0 minimum 128 maximum " + max);
+             document.writeln("<br>latency-path payload-rate upstream 0 minimum 32 maximum " + min);
+             document.writeln("<br>latency-path type 0 fast");
+	     document.writeln("<br>service-mode adsl2+");
+	     document.writeln("<br>no shutdown");
+	     document.writeln("<br>exit");
+	     document.writeln("<br>int atm " + shelf + slash + slot + slash + port);
+	     document.writeln("<br>no shutdown");
+	     document.writeln("<br>exit");
+	     document.writeln("<br>interface vcl " + shelf + slash + slot + slash + port);
+	     document.writeln("vpi 0 vci 35");
+	     document.writeln("<br>no shutdown");
+	     document.writeln("<br>exit");
+	     document.writeln("<br>cross-connect atm index get-next vcl " + shelf + slash + slot + slash + port);
+	     document.writeln("vpi 0 vci 35 vcl 1/a/1 ");
+	     document.writeln("vpi " + vpi);
+	     document.writeln("vci " + vci);
+	     document.writeln("<br>cross-connect atm index get-next vcl " + shelf + slash + slot + slash + port);
+	     document.writeln("vpi 0 vci 35 vcl 1/b/1 ");
+	     document.writeln("vpi " + vpi);
+	     document.writeln("vci " + vci);
+	     document.writeln("<br>description " + phone);
+	     document.writeln("<br>no shutdown");
+	     document.writeln("<br>exit");
+}
+else if(type == "vdsl_gbond") {
+	     max = max / 2;
+	     min = min / 2;
+             document.writeln("config t<br>");
+             document.writeln("interface vdsl " + shelf + slash + slot + slash + port);
+	     document.writeln("<br>description " + phone);
+             document.writeln("<br>dmt-options snr-margin downstream margins minimum 0.0 target 8.0 maximum 31.0<br>");
+             document.writeln("dmt-options snr-margin upstream margins minimum 0.0 target 8.0 maximum 31.0 <br>");
+             document.writeln("latency-path payload-rate downstream 0 minimum 128 maximum " + max);
+             document.writeln("<br>latency-path payload-rate upstream 0 minimum 32 maximum " + min);
+             document.writeln("<br>latency-path type downstream 0 fast");
+             document.writeln("<br>latency-path type upstream 0 fast");
+	     document.writeln("<br>power-back-off upstream disable");
+	     document.writeln("<br>service-mode adsl2+");
+	     document.writeln("<br>no shutdown");
+	     document.writeln("<br>exit");
+             document.writeln("<br>interface vdsl " + shelf + slash + slot + slash + port2);
+	     document.writeln("<br>description " + phone);
+             document.writeln("<br>dmt-options snr-margin downstream margins minimum 0.0 target 8.0 maximum 31.0<br>");
+             document.writeln("dmt-options snr-margin upstream margins minimum 0.0 target 8.0 maximum 31.0 <br>");
+             document.writeln("latency-path payload-rate downstream 0 minimum 128 maximum " + max);
+             document.writeln("<br>latency-path payload-rate upstream 0 minimum 32 maximum " + min);
+             document.writeln("<br>latency-path type downstream 0 fast");
+             document.writeln("<br>latency-path type upstream 0 fast");
+	     document.writeln("<br>power-back-off upstream disable");
+	     document.writeln("<br>service-mode adsl2+");
+	     document.writeln("<br>no shutdown");
+	     document.writeln("<br>exit");
+	     document.writeln("<br>int atm " + shelf + slash + slot + slash + port);
+	     document.writeln("<br>shutdown");
+	     document.writeln("<br>exit");
+	     document.writeln("<br>int atm " + shelf + slash + slot + slash + port2);
+	     document.writeln("<br>shutdown");
+	     document.writeln("<br>exit");
+	     document.writeln("<br>no interface vcl " + shelf + slash + slot + slash + port);
+	     document.writeln("vpi 0 vci 35");
+	     document.writeln("<br>no interface vcl " + shelf + slash + slot + slash + port2);
+	     document.writeln("vpi 0 vci 35");
+             document.writeln("<br>interface efm-port " + shelf + slash + slot + slash + port);
+	     document.writeln("<br>no shutdown");
+	     document.writeln("<br>exit");
+             document.writeln("<br>interface efm-port " + shelf + slash + slot + slash + port2);
+	     document.writeln("<br>no shutdown");
+	     document.writeln("<br>exit");
+             document.writeln("<br>interface efm-group " + shelf + slash + slot + slash + port);
+	     document.writeln("<br>link " + slot + slash + port + comma + slot + slash + port2);
+	     document.writeln("<br>no rate-control en");
+	     document.writeln("<br>rate-control rate upstream 1 downstream 1");
+	     document.writeln("<br>no shutdown");
+	     document.writeln("<br>exit");
+             document.writeln("<br>interface vdsl " + shelf + slash + slot + slash + port);
+	     document.writeln("<br>no shutdown");
+	     document.writeln("<br>exit");
+             document.writeln("<br>interface vdsl " + shelf + slash + slot + slash + port2);
+	     document.writeln("<br>no shutdown");
+	     document.writeln("<br>exit");
+	     document.writeln("<br>evc-map " + shelf + slash + slot + slash + port);
+	     document.writeln(shelf + slash + slot);
+	     document.writeln("<br>connect evc " + vpi);
+	     document.writeln("<br>connect uni efm-group " + shelf + slash + slot + slash + port);
+	     document.writeln("<br>men-c-tag " + vci);
+	     document.writeln("<br>encapsulation auto");
+	     document.writeln("<br>no shutdown");
+	     document.writeln("<br>exit");
+
+
+}
+else{
+}
+	     
+          }
+        </script>
+      </HEAD>
+      <BODY>
+
+      <left>
+<form name="myform">
+
+<select name="type">
+<option value="adsl_adsl_eth">adsl_adsl_eth</option>
+<option value="adsl_adsl_atm">adsl_adsl_atm</option>
+<option value="vdsl_adsl">vdsl_adsl</option>
+<option value="vdsl_vdsl">vdsl_vdsl</option>
+<option value="vdsl_gbond">vdsl_gbond</option>
+</select>
+<br>
+  <label for="phone">Phone</label>
+  <input  type="text" name="phone" maxlength="10" size="10">
+    <br>
+  <label for="max">Up</label>
+  <input  type="max" name="max" maxlength="10" size="10">
+  <label for="min">Down</label>
+  <input  type="min" name="min" maxlength="10" size="10">
+    <br>
+  <label for="shelf">Shelf</label>
+  <input  type="text" name="shelf" maxlength="10" size="10">
+  <label for="slot">Slot</label>
+  <input  type="text" name="slot" maxlength="10" size="10">
+  <label for="port">Port</label>
+  <input  type="text" name="port" maxlength="10" size="10">
+    <br>
+  <label for="vpi">VPI</label>
+  <input  type="vpi" name="vpi" maxlength="10" size="10">
+  <label for="vci">VCI</label>
+  <input  type="vci" name="vci" maxlength="10" size="10">
+    <br>
+  <input type="submit" value="Submit" onClick="addtext()">
+
+</form>
+
+
+    </BODY>
+    </HTML>
